@@ -1,85 +1,206 @@
 # Enhanced Examination Management System
 
-This is a complete Full Stack Web Application for a B.Tech S4 DBMS project. It uses HTML, CSS, JavaScript for the frontend, Node.js with Express for the backend APIs, and MySQL for the database.
+A full-stack web application developed as a B.Tech DBMS project for managing student examination records, subjects, internal marks, and examination results.
 
-## Project Structure
+## 📌 Overview
 
-\`\`\`
-/examination-system
-  /frontend
-    index.html
-    add_student.html
-    view_students.html
-    add_marks.html
-    view_results.html
-    style.css
-  /backend
-    server.js
-    package.json
-  database.sql
-  README.md
-\`\`\`
+The **Enhanced Examination Management System** is a web-based application designed to simplify the management of student examination information.
 
----
+The system provides functionality for managing students, subjects, internal marks, and examination results through a simple web interface.
 
-## Step-by-Step Run Instructions
+## ✨ Features
 
-### 1. Prerequisites
-- **Node.js**: Download and install from [nodejs.org](https://nodejs.org/).
-- **MySQL Server**: Download and install MySQL (or use XAMPP / WAMP / MySQL Workbench).
+- Add student details
+- View student records
+- Add internal examination marks
+- View examination results
+- Manage subjects
+- Store examination data using MySQL
+- REST API backend using Node.js and Express.js
+- Simple and responsive web interface
 
-### 2. Setup the Database (MySQL)
-1. Open your MySQL client (e.g., MySQL Workbench, phpMyAdmin, or terminal).
-2. Copy the contents of the `database.sql` file provided in this project.
-3. Execute the SQL script. This will create a database named `examination_management` and all the required tables (students, subjects, exams, internal_marks, results, etc.).
-4. **Important:** Add some subjects manually so you can add marks later. Run this in MySQL:
-   \`\`\`sql
-   USE examination_management;
-   INSERT INTO subjects (subject_name, credits) VALUES ('Database Management Systems', 4);
-   INSERT INTO subjects (subject_name, credits) VALUES ('Operating Systems', 3);
-   \`\`\`
-   *(Subject IDs will be 1 and 2 respectively).*
+## 🛠️ Technologies Used
 
-### 3. Setup the Backend (Node.js)
-1. Open your terminal or command prompt.
-2. Navigate to the `backend` folder:
-   \`\`\`cmd
-   cd path/to/examination-system/backend
-   \`\`\`
-3. Install the required dependencies:
-   \`\`\`cmd
-   npm install
-   \`\`\`
-4. Check database credentials in `server.js` (Line 11):
-   \`\`\`javascript
-   const db = mysql.createConnection({
-       host: 'localhost',
-       user: 'root',
-       password: '', // Enter your MySQL root password here if you have one
-       database: 'examination_management'
-   });
-   \`\`\`
-5. Start the backend server:
-   \`\`\`cmd
-   node server.js
-   \`\`\`
-   You should see:
-   > Server running on port 3000
-   > Connected to MySQL database!
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
 
-### 4. Run the Frontend
-1. The frontend uses plain HTML, CSS, and JS. You **do not** need a web server to view the basic UI, but it's recommended to serve the `frontend` folder using an extension like **Live Server** in VS Code to prevent any CORS issues, OR simply double-click the `index.html` file to open it in your browser.
-2. Navigate the system:
-   - Go to **Add Student** and add a student.
-   - Go to **View Students** to verify they've been added.
-   - Go to **Add Marks**, type the Student ID (e.g., 1) and Subject ID (e.g., 1), and submit marks.
-   - On the same page, under "Calculate Final Result", enter the Student ID and Subject ID again to generate the grade.
-   - Go to **View Results** to see the final outputs.
+### Backend
+- Node.js
+- Express.js
 
----
+### Database
+- MySQL
 
-### Features Implemented
-- **Student Management:** Frontend UI to add and list students, mapped directly to MySQL.
-- **Internal Assessment Management:** Frontend UI to enter marks for any subject a student took.
-- **Result Management:** Calculates total marks, assigns a standard grade (S, A, B, C, D, E, F), and permanently stores it.
-- **RESTful APIs:** Clean JSON communication between client and Node.js.
+## 📂 Project Structure
+
+```text
+ENHANCED-EXAMINATION-MANAGEMENT-SYSTEM/
+│
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   ├── package-lock.json
+│   └── .gitignore
+│
+├── frontend/
+│   ├── index.html
+│   ├── add_student.html
+│   ├── add_marks.html
+│   ├── view_students.html
+│   ├── view_results.html
+│   └── style.css
+│
+├── database.sql
+└── README.md
+```
+
+## ⚙️ Prerequisites
+
+Before running the project, make sure the following are installed:
+
+- [Node.js](https://nodejs.org/)
+- MySQL Server
+
+You can also use MySQL Workbench, XAMPP, WAMP, or another MySQL client.
+
+## 🗄️ Database Setup
+
+1. Open MySQL Workbench or another MySQL client.
+2. Open the `database.sql` file included in this repository.
+3. Execute the SQL script.
+4. The script creates the required database and tables.
+
+The application uses the following database:
+
+```text
+examination_management
+```
+
+### Database Tables
+
+The database contains tables for managing information such as:
+
+- Students
+- Subjects
+- Examinations
+- Internal Marks
+- Results
+
+## 🚀 Backend Setup
+
+### 1. Open the project
+
+Open Command Prompt or PowerShell and navigate to the backend folder:
+
+```bash
+cd path/to/ENHANCED-EXAMINATION-MANAGEMENT-SYSTEM/backend
+```
+
+### 2. Install dependencies
+
+Run:
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+For security, database credentials are stored using environment variables instead of being hardcoded in the source code.
+
+Create a file named:
+
+```text
+.env
+```
+
+inside the `backend` folder.
+
+Add:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=examination_management
+```
+
+Replace `your_mysql_password` with your local MySQL password.
+
+> **Important:** Never upload your actual `.env` file or database password to GitHub.
+
+### 4. Start the backend server
+
+Inside the `backend` folder, run:
+
+```bash
+node server.js
+```
+
+If everything is configured correctly, you should see:
+
+```text
+Server running on port 3000
+Connected to MySQL database!
+```
+
+The backend will be available at:
+
+```text
+http://localhost:3000
+```
+
+## 🌐 Running the Frontend
+
+After starting the backend server, open the frontend application using a web browser.
+
+The frontend pages include:
+
+- `index.html` — Main page
+- `add_student.html` — Add student information
+- `view_students.html` — View student records
+- `add_marks.html` — Add examination marks
+- `view_results.html` — View examination results
+
+## 🔐 Security
+
+Sensitive database credentials are not stored directly in the source code.
+
+Environment variables are used to store local database configuration.
+
+The following files and folders are excluded from Git:
+
+```text
+.env
+node_modules/
+```
+
+This prevents sensitive credentials and installed dependencies from being uploaded to the public repository.
+
+## 🎓 Academic Project
+
+This project was developed as a **B.Tech Database Management Systems (DBMS) project**.
+
+It demonstrates the integration of:
+
+- Database design
+- MySQL
+- SQL queries
+- Node.js
+- Express.js
+- REST APIs
+- HTML
+- CSS
+- JavaScript
+
+## 👨‍💻 Author
+
+**SREEDHAR VIJAY**
+
+B.Tech Artificial Intelligence and Data Science
+
+## 📄 License
+
+This project is intended primarily for academic and educational purposes.
