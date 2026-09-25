@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student - Exams DB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Enhanced Examination Management System</h1>
+    </header>
+    
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="add_student.html">Add Student</a>
+        <a href="view_students.html">View Students</a>
+        <a href="add_marks.html">Add Marks</a>
+        <a href="view_results.html">View Results</a>
+    </nav>
+    
+    <div class="container">
+        <h2>Add Student</h2>
+        <div id="message"></div>
+        
+        <form id="addStudentForm">
+            <div class="form-group">
+                <label for="name">Student Name:</label>
+                <input type="text" id="name" name="name" required placeholder="Enter student name">
+            </div>
+            
+            <div class="form-group">
+                <label for="dept">Department:</label>
+                <input type="text" id="dept" name="dept" required placeholder="e.g., Computer Science">
+            </div>
+            
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <input type="number" id="semester" name="semester" min="1" max="8" required placeholder="Enter semester number">
+            </div>
+            
+            <button type="submit">Register Student</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const dept = document.getElementById('dept').value;
+            const semester = document.getElementById('semester').value;
+            const msgBox = document.getElementById('message');
+
+            fetch('http://localhost:3000/api/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, dept, semester })
+            })
+            .then(response => response.json())
+            .then(data => {
+                msgBox.style.display = 'block';
+                if(data.error) {
+                    msgBox.className = 'message error';
+                    msgBox.textContent = 'Error: ' + data.error;
+                } else {
+                    msgBox.className = 'message success';
+                    msgBox.textContent = data.message;
+                    document.getElementById('addStudentForm').reset();
+                }
+            })
+            .catch(error => {
+                msgBox.style.display = 'block';
+                msgBox.className = 'message error';
+                msgBox.textContent = 'Connection failed. Is the server running?';
+            });
+        });
+    </script>
+</body>
+</html>

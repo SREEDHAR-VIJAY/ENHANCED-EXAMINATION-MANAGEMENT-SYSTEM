@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Students - Exams DB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Enhanced Examination Management System</h1>
+    </header>
+    
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="add_student.html">Add Student</a>
+        <a href="view_students.html">View Students</a>
+        <a href="add_marks.html">Add Marks</a>
+        <a href="view_results.html">View Results</a>
+    </nav>
+    
+    <div class="container">
+        <h2>Registered Students</h2>
+        <div id="message"></div>
+        
+        <table id="studentsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be loaded here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const msgBox = document.getElementById('message');
+            const tbody = document.querySelector('#studentsTable tbody');
+
+            fetch('http://localhost:3000/api/students')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        msgBox.style.display = 'block';
+                        msgBox.className = 'message error';
+                        msgBox.textContent = 'Error: ' + data.error;
+                    } else {
+                        if (data.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No students found</td></tr>';
+                        } else {
+                            data.forEach(student => {
+                                const row = `
+                                <tr>
+                                  <td>${student.student_id}</td>
+                                  <td>${student.name}</td>
+                                  <td>${student.dept}</td>
+                                  <td>${student.semester}</td>
+                                </tr>`;
+                                tbody.innerHTML += row;
+                            });
+                        }
+                    }
+                })
+                .catch(error => {
+                    msgBox.style.display = 'block';
+                    msgBox.className = 'message error';
+                    msgBox.textContent = 'Connection failed. Is the server running?';
+                });
+        });
+    </script>
+</body>
+</html>

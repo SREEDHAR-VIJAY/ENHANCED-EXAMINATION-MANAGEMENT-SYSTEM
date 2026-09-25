@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Internal Marks - Exams DB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Enhanced Examination Management System</h1>
+    </header>
+    
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="add_student.html">Add Student</a>
+        <a href="view_students.html">View Students</a>
+        <a href="add_marks.html">Add Marks</a>
+        <a href="view_results.html">View Results</a>
+    </nav>
+    
+    <div class="container">
+        <h2>Add Internal Marks</h2>
+        <div id="message"></div>
+        
+        <form id="addMarksForm">
+            <div class="form-group">
+                <label for="student_id">Student ID:</label>
+                <input type="number" id="student_id" name="student_id" required placeholder="Enter student ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="subject_id">Subject ID:</label>
+                <!-- For simplicity, using text input. In a real app, this might be a dropdown -->
+                <input type="number" id="subject_id" name="subject_id" required placeholder="Enter subject ID (1, 2, etc.)">
+            </div>
+            
+            <div class="form-group">
+                <label for="marks">Internal Marks (Out of 100):</label>
+                <input type="number" id="marks" name="marks" min="0" max="100" required placeholder="Enter marks gained">
+            </div>
+            
+            <button type="submit">Submit Marks</button>
+        </form>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+        
+        <h2>Calculate Final Result</h2>
+        <p>After adding internal marks, generate the final result which calculates the grade.</p>
+        <form id="calcResultForm">
+            <div class="form-group">
+                <label for="calc_student_id">Student ID:</label>
+                <input type="number" id="calc_student_id" name="calc_student_id" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="calc_subject_id">Subject ID:</label>
+                <input type="number" id="calc_subject_id" name="calc_subject_id" required>
+            </div>
+            
+            <button type="submit" style="background-color: #3498db;">Generate Result</button>
+        </form>
+    </div>
+
+    <script>
+        // Form 1: Add Internal Marks
+        document.getElementById('addMarksForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const student_id = document.getElementById('student_id').value;
+            const subject_id = document.getElementById('subject_id').value;
+            const marks = document.getElementById('marks').value;
+            const msgBox = document.getElementById('message');
+
+            fetch('http://localhost:3000/api/internal_marks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ student_id, subject_id, marks })
+            })
+            .then(response => response.json())
+            .then(data => {
+                msgBox.style.display = 'block';
+                if(data.error) {
+                    msgBox.className = 'message error';
+                    msgBox.innerHTML = 'Error: ' + data.error + '<br><em>Hint: Make sure the Student ID and Subject ID exist in the database!</em>';
+                } else {
+                    msgBox.className = 'message success';
+                    msgBox.textContent = data.message;
+                    document.getElementById('addMarksForm').reset();
+                }
+            })
+            .catch(error => {
+                msgBox.style.display = 'block';
+                msgBox.className = 'message error';
+                msgBox.textContent = 'Connection failed.';
+            });
+        });
+
+        // Form 2: Calculate Result
+        document.getElementById('calcResultForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const student_id = document.getElementById('calc_student_id').value;
+            const subject_id = document.getElementById('calc_subject_id').value;
+            const msgBox = document.getElementById('message');
+
+            fetch('http://localhost:3000/api/calculate_result', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ student_id, subject_id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                msgBox.style.display = 'block';
+                if(data.error) {
+                    msgBox.className = 'message error';
+                    msgBox.textContent = 'Error: ' + data.error;
+                } else {
+                    msgBox.className = 'message success';
+                    msgBox.innerHTML = data.message + '<br><strong>Total Marks: </strong>' + data.total_marks + '<br><strong>Grade: </strong>' + data.grade;
+                }
+            })
+            .catch(error => {
+                msgBox.style.display = 'block';
+                msgBox.className = 'message error';
+                msgBox.textContent = 'Connection failed.';
+            });
+        });
+    </script>
+</body>
+</html>
